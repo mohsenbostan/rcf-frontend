@@ -49,6 +49,20 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+
+    <v-fab-transition>
+      <v-btn
+          color="pink"
+          fab
+          large
+          dark
+          bottom
+          left
+          class="v-btn--example ml-5 mb-5"
+      >
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </v-app>
 </template>
 
