@@ -5,14 +5,14 @@
         content="center"
     >
       <v-col
-      cols="12"
-      md="6"
+          cols="12"
+          md="6"
       >
         <v-card>
           <v-card-title>
-            <a href="#" class="text-decoration-none black--text">
+            <router-link to="/thread/laravel+error" class="text-decoration-none black--text">
               <h2>Laravel error</h2>
-            </a>
+            </router-link>
           </v-card-title>
           <v-card-text>
             <v-row>
@@ -23,7 +23,8 @@
                 <p class="text-right">2020/10/10 20:30</p>
               </v-col>
             </v-row>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum laudantium molestiae mollitia praesentium qui! Accusantium atque corporis cupiditate deleniti dicta.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum laudantium molestiae mollitia praesentium
+              qui! Accusantium atque corporis cupiditate deleniti dicta.</p>
           </v-card-text>
         </v-card>
       </v-col>
