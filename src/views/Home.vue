@@ -3,6 +3,7 @@
     <v-row
         justify="center"
         content="center"
+        v-show="!isLoading"
     >
       <v-col
           cols="12"
@@ -28,6 +29,36 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <v-col
+          cols="12"
+          md="12"
+      >
+        <div class="text-center">
+          <v-pagination
+              v-model="current_page"
+              :length="last_page"
+          ></v-pagination>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row
+        justify="center"
+        content="center"
+        v-show="isLoading"
+    >
+      <v-col
+          cols="12"
+          md="12"
+      >
+        <div class="text-center">
+          <v-progress-circular
+              :size="70"
+              :width="7"
+              color="purple"
+              indeterminate
+          ></v-progress-circular>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -38,11 +69,32 @@ import {threadsListRequest} from "@/requests/Threads";
 export default {
   name: 'Home',
   data: () => ({
-    threads: []
+    threads: [],
+    current_page: 1,
+    last_page: 1,
+    isLoading: true
   }),
+  watch: {
+    current_page: function (page) {
+      threadsListRequest(page).then(res => {
+        this.threads = res.data.data;
+        this.current_page = res.data.current_page;
+        this.last_page = res.data.last_page;
+        this.isLoading = false;
+      }).catch( err => {
+        console.log(err)
+        if (err.response.statusCode !== 200) {
+          alert("Failed TO Load Data!");
+        }
+      })
+    }
+  },
   mounted() {
-    threadsListRequest.then(res => {
-      this.threads = res.data.data
+    threadsListRequest(this.current_page).then(res => {
+      this.threads = res.data.data;
+      this.current_page = res.data.current_page;
+      this.last_page = res.data.last_page;
+      this.isLoading = false;
     }).catch( err => {
       console.log(err)
       if (err.response.statusCode !== 200) {
