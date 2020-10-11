@@ -27,6 +27,7 @@
                   name="name"
                   prepend-icon="mdi-account"
                   type="text"
+                  v-model="name"
               ></v-text-field>
 
               <v-text-field
@@ -34,6 +35,7 @@
                   name="email"
                   prepend-icon="mdi-email"
                   type="email"
+                  v-model="email"
               ></v-text-field>
 
               <v-text-field
@@ -42,12 +44,13 @@
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
+                  v-model="password"
               ></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary">Register</v-btn>
+            <v-btn color="primary" @click="sendRegisterRequest">Register</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -56,8 +59,31 @@
 </template>
 
 <script>
+import {registerRequest} from "@/requests/Auth";
+
 export default {
-  name: "Register"
+  name: "Register",
+  data: () => ({
+    name: null,
+    email: null,
+    password: null
+  }),
+
+  methods: {
+    sendRegisterRequest() {
+      const formData = {
+        name: this.name,
+        email: this.email,
+        password: this.password
+      }
+
+      registerRequest(formData).then( res => {
+        this.$router.push('/login')
+      }).catch( err => {
+        console.error(err)
+      })
+    }
+  }
 }
 </script>
 
