@@ -27,6 +27,7 @@
                   name="email"
                   prepend-icon="mdi-email"
                   type="email"
+                  v-model="email"
               ></v-text-field>
 
               <v-text-field
@@ -35,12 +36,13 @@
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
+                  v-model="password"
               ></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary">Login</v-btn>
+            <v-btn color="primary" @click="sendLoginRequest">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -49,8 +51,19 @@
 </template>
 
 <script>
+import {loginRequest} from "@/requests/Auth";
+
 export default {
-  name: "Login"
+  name: "Login",
+  data: () => ({
+    email: null,
+    password: null
+  }),
+  methods: {
+    sendLoginRequest() {
+      loginRequest({email: this.email, password: this.password});
+    }
+  }
 }
 </script>
 
