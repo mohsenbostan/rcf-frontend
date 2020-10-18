@@ -5,11 +5,20 @@ export let registerRequest = (formData) => {
     return Axios.post(`auth/register`, formData)
 };
 
-export let loginRequest = (formData) => {
-    if (!checkAuth()){
-        axios.get('http://localhost/api/csrf-cookie').then(res => {
-            return Axios.post(`auth/login`, formData)
+export let loginRequest = async (formData) => {
+    if (!checkAuth()) {
+        let loginReq
+        await axios.get('http://localhost/api/csrf-cookie').then(res => {
+            loginReq = Axios.post(`auth/login`, formData)
         })
+
+        return loginReq
+    }
+};
+
+export let getUserDataRequest = () => {
+    if (checkAuth()) {
+        return Axios.get(`auth/user`)
     }
 };
 

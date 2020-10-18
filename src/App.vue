@@ -69,6 +69,8 @@
 
 <script>
 
+import {getUserDataRequest} from "@/requests/Auth";
+
 export default {
   name: 'App',
 
