@@ -43,6 +43,14 @@
                   :error-messages="errors.password"
               ></v-text-field>
             </v-form>
+            <div class="text-center mt-3" v-show="isLoading">
+              <v-progress-circular
+                  :size="48"
+                  :width="4"
+                  color="purple"
+                  indeterminate
+              ></v-progress-circular>
+            </div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -60,20 +68,28 @@ import {loginRequest} from "@/requests/Auth";
 export default {
   name: "Login",
   data: () => ({
+    isLoading: false,
     email: null,
     password: null,
     errors: {
       email: null,
       password: null,
     },
-    hasErrors: false
   }),
   methods: {
     sendLoginRequest() {
-      loginRequest({email: this.email, password: this.password}).catch(err => {
+      this.isLoading = true;
+      loginRequest({email: this.email, password: this.password}).then(res => {
+        if (res.status === 200) {
+          this.isLoading = false;
+          localStorage.setItem('isAuth', 'true');
+
+          this.$router.push('/');
+        }
+      }).catch(err => {
         if (err.response.status === 422) {
-          this.hasErrors = true;
           this.errors = err.response.data.errors;
+          this.isLoading = false;
         }
       });
     }

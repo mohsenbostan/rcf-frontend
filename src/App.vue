@@ -27,23 +27,34 @@
 
       <v-spacer></v-spacer>
 
-      <router-link to="/register">
-        <v-btn
-            text
-        >
-          <span class="mr-2">Register</span>
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-      </router-link>
+      <div v-show="!isAuth">
+        <router-link to="/register">
+          <v-btn
+              text
+          >
+            <span class="mr-2">Register</span>
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+        </router-link>
 
-      <router-link to="/login">
+        <router-link to="/login">
+          <v-btn
+              text
+          >
+            <span class="mr-2">Login</span>
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </router-link>
+      </div>
+      <div v-show="isAuth">
+          {{ userData.name }}
         <v-btn
-            text
+        light
+        class="ml-3"
         >
-          <span class="mr-2">Login</span>
-          <v-icon>mdi-account</v-icon>
+          Logout
         </v-btn>
-      </router-link>
+      </div>
     </v-app-bar>
 
     <v-main>
@@ -69,17 +80,22 @@
 
 <script>
 
-import {getUserDataRequest} from "@/requests/Auth";
+import {checkAuth, getUserDataRequest} from "@/requests/Auth";
 
 export default {
   name: 'App',
 
   data: () => ({
-    //
+    isAuth: false,
+    userData: null
   }),
-
   mounted() {
-
+      this.isAuth = checkAuth();
+      if (this.isAuth) {
+        getUserDataRequest().then(res => {
+          this.userData = res.data[0]
+        })
+      }
   }
 };
 </script>

@@ -5,6 +5,7 @@ import Register from "@/views/auth/Register";
 import Login from "@/views/auth/Login";
 import SingleThread from "@/views/thread/SingleThread";
 import CreateThread from "@/views/thread/CreateThread";
+import {checkAuth} from "@/requests/Auth";
 
 Vue.use(VueRouter)
 
@@ -17,12 +18,12 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: !checkAuth() ? Register : Home
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: !checkAuth() ? Login : Home
   },
   {
     path: '/create/thread',
