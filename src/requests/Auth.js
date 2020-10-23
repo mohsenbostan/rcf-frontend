@@ -6,7 +6,7 @@ export let registerRequest = (formData) => {
 };
 
 export let loginRequest = async (formData) => {
-    if (!checkAuth()) {
+    if (!await checkAuth()) {
         let loginReq
         await axios.get(`${baseUrl}csrf-cookie`).then(res => {
             loginReq = Axios.post(`auth/login`, formData)
@@ -14,6 +14,10 @@ export let loginRequest = async (formData) => {
 
         return loginReq
     }
+};
+
+export let logoutRequest = () => {
+    return Axios.post(`auth/logout`)
 };
 
 export let getUserDataRequest = () => {
@@ -24,8 +28,7 @@ export let getUserDataRequest = () => {
 
 export let checkAuth = async () => {
     let isAuth = false;
-    await Axios.get(`auth/user`).then(res => isAuth = res.data.message !== "Unauthenticated.")
+    await Axios.get(`auth/user`).then(res => isAuth = true).catch(err => isAuth = false)
     localStorage.setItem('isAuth', isAuth ? 'true' : 'false')
-
     return isAuth;
 };

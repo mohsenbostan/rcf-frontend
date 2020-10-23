@@ -1,33 +1,33 @@
 <template>
   <v-app>
     <v-app-bar
-      app
-      color="primary"
-      dark
+        app
+        color="primary"
+        dark
     >
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
+            alt="Vuetify Logo"
+            class="shrink mr-2"
+            contain
+            src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+            transition="scale-transition"
+            width="40"
         />
 
         <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
+            alt="Vuetify Name"
+            class="shrink mt-1 hidden-sm-and-down"
+            contain
+            min-width="100"
+            src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+            width="100"
         />
       </div>
 
       <v-spacer></v-spacer>
 
-      <div v-show="!isAuth">
+      <div v-if="!isAuth">
         <router-link to="/register">
           <v-btn
               text
@@ -46,11 +46,12 @@
           </v-btn>
         </router-link>
       </div>
-      <div v-show="isAuth">
-          {{ userData.name }}
+      <div v-if="isAuth">
+        {{ userData.name }}
         <v-btn
-        light
-        class="ml-3"
+            light
+            class="ml-3"
+            @click="sendLogoutRequest"
         >
           Logout
         </v-btn>
@@ -80,22 +81,34 @@
 
 <script>
 
-import {checkAuth, getUserDataRequest} from "@/requests/Auth";
+import {checkAuth, getUserDataRequest, logoutRequest} from "@/requests/Auth";
 
 export default {
   name: 'App',
 
   data: () => ({
     isAuth: false,
-    userData: null
+    userData: {
+      name: null
+    }
   }),
+  methods: {
+    sendLogoutRequest() {
+      logoutRequest().then(res => {
+        this.$router.push('/')
+        this.isAuth = false;
+        localStorage.setItem('isAuth', 'false');
+      })
+    }
+  },
   mounted() {
-      this.isAuth = checkAuth();
-      if (this.isAuth) {
-        getUserDataRequest().then(res => {
-          this.userData = res.data[0]
-        })
-      }
+    checkAuth();
+    this.isAuth = localStorage.getItem('isAuth') === 'true';
+    if (this.isAuth) {
+      getUserDataRequest().then(res => {
+        this.userData = res.data[0]
+      })
+    }
   }
 };
 </script>
