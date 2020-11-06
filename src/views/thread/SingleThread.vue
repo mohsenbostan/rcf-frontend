@@ -12,21 +12,18 @@
             outlined
         >
           <v-card-title>
-            <h2>Laravel Error</h2>
+            <h2>{{ thread.title }}</h2>
           </v-card-title>
           <v-card-text>
             <v-row>
               <v-col>
-                <p>Mohsen Bostan</p>
+                <p>{{  thread.user.name }}</p>
               </v-col>
               <v-col>
-                <p class="text-right">2020/10/10 20:30</p>
+                <p class="text-right">{{ thread.created_at }}</p>
               </v-col>
             </v-row>
-            <vue-markdown>
-              # My Markdown Test
-              [Google](https://google.com)
-            </vue-markdown>
+            <vue-markdown v-html="thread.content"></vue-markdown>
           </v-card-text>
         </v-card>
       </v-col>
@@ -99,11 +96,40 @@
 
 <script>
 import VueMarkdown from 'vue-markdown/src/VueMarkdown'
+import {getSingleThreadRequest} from "@/requests/Threads";
 
 export default {
   name: "SingleThread",
   components: {
     VueMarkdown
+  },
+  data: () => ({
+    thread: {
+      id: null,
+      title: null,
+      slug: null,
+      content: null,
+      best_answer_id: null,
+      created_at: null,
+      channel: {
+        id: null,
+        name: null
+      },
+      user: {
+        id: null,
+        name: null
+      },
+    }
+  }),
+  methods: {
+    fetchThread() {
+      getSingleThreadRequest(this.$route.params.slug).then(res => {
+        this.thread = res.data
+      })
+    }
+  },
+  mounted() {
+    this.fetchThread()
   }
 }
 </script>
