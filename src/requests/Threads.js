@@ -8,6 +8,10 @@ export let getSingleThreadRequest = (slug) => {
     return Axios.get(`threads/${slug}`)
 };
 
+export let submitNewReplyForThreadRequest = (formData) => {
+    return Axios.post(`threads/answers`, formData)
+};
+
 export let createNewThreadRequest = (formData) => {
     return Axios.post(`threads`, formData)
 };
