@@ -27,6 +27,7 @@
           </v-card-text>
         </v-card>
       </v-col>
+
       <v-col
           cols="12"
           md="8"
@@ -35,6 +36,7 @@
           <v-col><h2>Replies: </h2></v-col>
           <v-col
               class="text-right"
+              v-if="isAuth"
           >
             <v-btn
                 ripple
@@ -126,7 +128,7 @@
                       cols="12"
                       md="12"
                   >
-                    <h5>{{ answer.user_id }}</h5>
+                    <h5>{{ answer.user.name }}</h5>
                   </v-col>
                   <v-col
                       cols="12"
@@ -157,6 +159,7 @@
 <script>
 import VueMarkdown from 'vue-markdown/src/VueMarkdown'
 import {getSingleThreadRequest, submitNewReplyForThreadRequest} from "@/requests/Threads";
+import {checkAuth} from '@/requests/Auth';
 
 export default {
   name: "SingleThread",
@@ -164,6 +167,7 @@ export default {
     VueMarkdown
   },
   data: () => ({
+    isAuth: false,
     thread: {
       id: null,
       title: null,
@@ -179,6 +183,7 @@ export default {
         id: null,
         name: null
       },
+      answers: []
     },
     showReplyBox: false,
     replyData: {
@@ -202,7 +207,9 @@ export default {
     }
   },
   mounted() {
-    this.fetchThread()
+    this.fetchThread();
+    checkAuth();
+    this.isAuth = localStorage.getItem('isAuth') === 'true';
   }
 }
 </script>
