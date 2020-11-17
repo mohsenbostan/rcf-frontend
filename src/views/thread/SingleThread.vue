@@ -12,7 +12,28 @@
             outlined
         >
           <v-card-title>
-            <h2>{{ thread.title }}</h2>
+            <v-row>
+              <v-col
+                  cols="6"
+                  md="6"
+              >
+                <h2>{{ thread.title }}</h2>
+              </v-col>
+              <v-col
+                  cols="6"
+                  md="6"
+                  v-if="userCanDelete"
+              >
+                <v-btn
+                    color="red"
+                    @click="deleteThread"
+                    class="text-right"
+                >
+                  Delete
+                </v-btn>
+              </v-col>
+            </v-row>
+
           </v-card-title>
           <v-card-text>
             <v-row>
@@ -158,8 +179,8 @@
 
 <script>
 import VueMarkdown from 'vue-markdown/src/VueMarkdown'
-import {getSingleThreadRequest, submitNewReplyForThreadRequest} from "@/requests/Threads";
-import {checkAuth} from '@/requests/Auth';
+import {deleteThreadRequest, getSingleThreadRequest, submitNewReplyForThreadRequest} from "@/requests/Threads";
+import {checkAuth, getUserDataRequest} from '@/requests/Auth';
 
 export default {
   name: "SingleThread",
@@ -168,6 +189,7 @@ export default {
   },
   data: () => ({
     isAuth: false,
+    userCanDelete: false,
     thread: {
       id: null,
       title: null,
@@ -204,12 +226,22 @@ export default {
         this.fetchThread();
         this.showReplyBox = false;
       })
+    },
+
+    deleteThread() {
+      deleteThreadRequest(this.thread.id).then(res => {
+        this.$router.push('/');
+      })
     }
   },
   mounted() {
     this.fetchThread();
     checkAuth();
     this.isAuth = localStorage.getItem('isAuth') === 'true';
+    getUserDataRequest().then(res => {
+      this.userCanDelete = res.data[0].id === this.thread.user.id;
+    })
+
   }
 }
 </script>

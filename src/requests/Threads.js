@@ -15,3 +15,7 @@ export let submitNewReplyForThreadRequest = (formData) => {
 export let createNewThreadRequest = (formData) => {
     return Axios.post(`threads`, formData)
 };
+
+export let deleteThreadRequest = (id) => {
+    return Axios.delete(`threads/${id}`)
+};
