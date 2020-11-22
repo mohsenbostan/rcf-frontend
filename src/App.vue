@@ -24,7 +24,9 @@
             width="100"
         />
       </div>
-
+      <router-link to="/leaderboards">
+        <span class="mr-2" style="color:white !important;">Leaderboards</span>
+      </router-link>
       <v-spacer></v-spacer>
 
       <div v-if="!isAuth">
